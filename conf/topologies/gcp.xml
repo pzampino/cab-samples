@@ -2,63 +2,24 @@
 <topology>
  <name>sandbox</name>
  <gateway>
-<!--
- <provider>
-   <role>authentication</role>
-   <name>ShiroProvider</name>
-   <enabled>true</enabled>
-   <param>
-     <name>sessionTimeout</name>
-     <value>30</value>
-   </param>
-   <param>
-     <name>main.ldapRealm</name>
-     <value>org.apache.knox.gateway.shirorealm.KnoxLdapRealm</value>
-   </param>
-   <param>
-     <name>main.ldapContextFactory</name>
-     <value>org.apache.knox.gateway.shirorealm.KnoxLdapContextFactory</value>
-   </param>
-   <param>
-     <name>main.ldapRealm.contextFactory</name>
-     <value>$ldapContextFactory</value>
-   </param>
-   <param>
-     <name>main.ldapRealm.userDnTemplate</name>
-     <value>uid={0},ou=people,dc=hadoop,dc=apache,dc=org</value>
-   </param>
-   <param>
-     <name>main.ldapRealm.contextFactory.url</name>
-     <value>ldap://localhost:33389</value>
-   </param>
-   <param>
-     <name>main.ldapRealm.contextFactory.authenticationMechanism</name>
-     <value>simple</value>
-   </param>
-   <param>
-     <name>urls./**</name>
-     <value>authcBasic</value>
-   </param>
- </provider>
--->
- <provider>
-   <role>federation</role>
-   <name>JWTProvider</name>
-   <enabled>true</enabled>
-   <param>
-     <name>knox.token.audiences</name>
-     <value>tokenbased</value>
-   </param>
- </provider>
- <provider>
-   <role>identity-assertion</role>
-   <name>Default</name>
-   <enabled>true</enabled>
-   <param>
-     <name>group.principal.mapping</name>
-     <value>admin=admin</value>
-   </param>
- </provider>
+   <provider>
+     <role>federation</role>
+     <name>JWTProvider</name>
+     <enabled>true</enabled>
+     <param>
+       <name>knox.token.audiences</name>
+       <value>tokenbased</value>
+     </param>
+   </provider>
+   <provider>
+     <role>identity-assertion</role>
+     <name>Default</name>
+     <enabled>true</enabled>
+     <param>
+       <name>group.principal.mapping</name>
+       <value>admin=admin</value>
+     </param>
+   </provider>
  </gateway>
  <service>
    <role>IDBROKER</role>
@@ -67,11 +28,12 @@
      <name>cloud.policy.config.provider</name>
      <value>default</value>
    </param>
-   <!-- pluggable cloud credentials client providers: default|ranger -->
+   <!-- pluggable cloud credentials client providers: GCP|AWS -->
    <param>
      <name>cloud.client.provider</name>
      <value>GCP</value>
    </param>
+   <!-- GCP service account for CAB -->
    <param>
      <name>idbroker.service.account.id</name>
      <value>idbroker@gcpidbroker.iam.gserviceaccount.com</value>
