@@ -1,0 +1,35 @@
+version: '2'
+
+services:
+  knox-dev:
+    build:
+      context: ./build
+      args:
+        knoxurl: https://github.com/pzampino/knox.git
+        branch: master
+    image: moresandeep/knox-dev:master
+
+  ldap:
+    image: moresandeep/knox-dev:master
+    ports:
+      - "33389:33389"
+    networks:
+      - knox-test
+    command: /ldap.sh
+
+  knox:
+    image: moresandeep/knox-dev:master
+    ports:
+      - "8443:8443"
+    networks:
+      - knox-test
+    command: /gateway.sh
+    volumes:
+      - ./topologies:/knox-runtime/conf/topologies
+      - ./logs:/knox-runtime/logs
+    depends_on:
+      - ldap
+
+networks:
+  knox-test:
+
