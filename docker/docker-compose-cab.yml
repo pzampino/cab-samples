@@ -27,6 +27,7 @@ services:
     volumes:
       - ./topologies:/knox-runtime/conf/topologies
       - ./logs:/knox-runtime/logs
+      - ./knoxshell:/knoxshell
     depends_on:
       - ldap
 
