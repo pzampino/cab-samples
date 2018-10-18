@@ -5,6 +5,9 @@ import org.apache.knox.gateway.shell.idbroker.Credentials as CAB
 ////////
 // This script assumes that knoxinit has been invoked for the calling user,
 // such that the access token is available in the user's home directory.
+//
+// This token is subsequently used to acquire AWS storage credentials for the
+// associated authenticated user.
 ////////
 
 gateway = "https://localhost:8443/gateway/cloud"

@@ -5,6 +5,12 @@ import org.apache.knox.gateway.shell.knox.token.Token
 import com.jayway.jsonpath.JsonPath
 import groovy.json.JsonSlurper
 
+////////
+// This script demonstrates the acquisition of a Knox delegation token, which
+// is subsequently used to acquire AWS storage credentials for the associated
+// authenticated user.
+////////
+
 gateway = "https://localhost:8443/gateway/cloud"
 
 credentials = new Credentials()

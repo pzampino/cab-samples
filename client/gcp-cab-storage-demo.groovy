@@ -1,6 +1,6 @@
 import org.apache.knox.gateway.shell.Hadoop
-import org.apache.knox.gateway.shell.KnoxTokenCredentialCollector
 import org.apache.knox.gateway.shell.idbroker.Credentials as CAB
+import org.apache.knox.gateway.shell.Credentials as Credentials
 import org.apache.knox.gateway.shell.knox.token.Token
 import groovy.json.JsonSlurper
 import org.apache.http.client.methods.HttpGet
@@ -8,21 +8,29 @@ import org.apache.http.impl.client.HttpClientBuilder
 import org.apache.http.util.EntityUtils
 
 ////////
-// This script assumes that knoxinit has been invoked for the calling user,
-// such that the access token is available in the user's home directory.
-//
-// This token is subsequently used to acquire GCP storage credentials for the
-// associated authenticated user.
+// This script demonstrates the acquisition of a Knox delegation token, which
+// is subsequently used to acquire GCP storage credentials for the associated
+// authenticated user.
 //
 // These storage credentials are then used to access the Google storage API.
 ////////
 
-gateway = "https://localhost:8443/gateway/gcp"
+gateway_host = "localhost"
+gateway = "https://" + gateway_host + ":8443/gateway/gcp"
 
-// Get the access token from a previous knoxinit
-credentials = new KnoxTokenCredentialCollector()
+credentials = new Credentials()
+credentials.add("ClearInput", "Enter username: ", "user")
+           .add("HiddenInput", "Enter password: ", "pass")
 credentials.collect()
-accessToken = credentials.string()
+
+tokenSession = Hadoop.login("https://" + gateway_host + ":8443/gateway/dt",
+                            credentials.get("user").string(),
+							credentials.get("pass").string())
+tokenResponse = Token.get(tokenSession).now().string
+json = (new JsonSlurper()).parseText( tokenResponse )
+accessToken = json.access_token
+println "KnoxToken: " + accessToken
+tokenSession.shutdown()
 
 println "Knox Token: " + accessToken + "\n" // TODO: DELETE ME
 
