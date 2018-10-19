@@ -15,11 +15,11 @@ gateway = "https://localhost:8443/gateway/cloud"
 // Get the access token from a previous knoxinit
 credentials = new KnoxTokenCredentialCollector()
 credentials.collect()
-accessToken = credentials.string()
+delegationToken = credentials.string()
 
-// Use the access token to get the cloud credentials from the ID Broker
+// Use the delegation token to get the cloud credentials from the ID Broker
 headers = new HashMap<String, String>();
-headers.put("Authorization", "Bearer " + accessToken)
+headers.put("Authorization", "Bearer " + delegationToken)
 
 session = Hadoop.login(gateway, headers)
 

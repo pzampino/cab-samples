@@ -19,21 +19,21 @@ import org.apache.http.util.EntityUtils
 
 gateway = "https://localhost:8443/gateway/gcp"
 
-// Get the access token from a previous knoxinit
+// Get the delegation token from a previous knoxinit
 credentials = new KnoxTokenCredentialCollector()
 credentials.collect()
-accessToken = credentials.string()
+delegationToken = credentials.string()
 
-println "Knox Token: " + accessToken + "\n" // TODO: DELETE ME
+println "Knox Token: " + delegationToken + "\n" // TODO: DELETE ME
 
 // Use the access token to get the cloud credentials from the ID Broker
 headers = new HashMap<String, String>();
-headers.put("Authorization", "Bearer " + accessToken)
+headers.put("Authorization", "Bearer " + delegationToken)
 session = Hadoop.login(gateway, headers)
-idBrokerResponse = CAB.get(session).now().string
-println "Temp Credentials from ID Broker:\n" + idBrokerResponse
+cabResponse = CAB.get(session).now().string
+println "Temp Credentials from CAB:\n" + cabResponse
 
-json = (new JsonSlurper()).parseText(idBrokerResponse)
+json = (new JsonSlurper()).parseText(cabResponse)
 storageAuthToken = json.accessToken
 //println "Storage auth token: " + storageAuthToken + "\n"
 
