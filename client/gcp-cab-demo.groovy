@@ -5,7 +5,7 @@ import org.apache.knox.gateway.shell.knox.token.Token
 import com.jayway.jsonpath.JsonPath
 import groovy.json.JsonSlurper
 
-gateway = "https://localhost:8443/gateway/gcp"
+gateway = "https://localhost:8443/gateway/gcp-cab"
 
 credentials = new Credentials()
 credentials.add("ClearInput", "Enter username: ", "user")

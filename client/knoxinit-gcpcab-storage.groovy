@@ -17,7 +17,7 @@ import org.apache.http.util.EntityUtils
 // These storage credentials are then used to access the Google storage API.
 ////////
 
-gateway = "https://localhost:8443/gateway/gcp"
+gateway = "https://localhost:8443/gateway/gcp-cab"
 
 // Get the delegation token from a previous knoxinit
 credentials = new KnoxTokenCredentialCollector()

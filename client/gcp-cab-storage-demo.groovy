@@ -16,7 +16,7 @@ import org.apache.http.util.EntityUtils
 ////////
 
 gateway_host = "localhost"
-gateway = "https://" + gateway_host + ":8443/gateway/gcp"
+gateway = "https://" + gateway_host + ":8443/gateway/gcp-cab"
 
 credentials = new Credentials()
 credentials.add("ClearInput", "Enter username: ", "user")
