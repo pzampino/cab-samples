@@ -10,7 +10,7 @@ import org.apache.knox.gateway.shell.idbroker.Credentials as CAB
 // associated authenticated user.
 ////////
 
-gateway = "https://localhost:8443/gateway/cloud"
+gateway = "https://localhost:8443/gateway/aws-cab"
 
 // Get the access token from a previous knoxinit
 credentials = new KnoxTokenCredentialCollector()

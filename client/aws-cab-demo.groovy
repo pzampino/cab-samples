@@ -11,7 +11,7 @@ import groovy.json.JsonSlurper
 // authenticated user.
 ////////
 
-gateway = "https://localhost:8443/gateway/cloud"
+gateway = "https://localhost:8443/gateway/aws-cab"
 
 credentials = new Credentials()
 credentials.add("ClearInput", "Enter username: ", "user")
