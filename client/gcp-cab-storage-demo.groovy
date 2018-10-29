@@ -32,8 +32,6 @@ accessToken = json.access_token
 println "KnoxToken: " + accessToken
 tokenSession.shutdown()
 
-println "Knox Token: " + accessToken + "\n" // TODO: DELETE ME
-
 // Use the access token to get the cloud credentials from the ID Broker
 headers = new HashMap<String, String>();
 headers.put("Authorization", "Bearer " + accessToken)
