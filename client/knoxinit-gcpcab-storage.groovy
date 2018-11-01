@@ -1,3 +1,4 @@
+import org.apache.knox.gateway.shell.CredentialCollectionException
 import org.apache.knox.gateway.shell.KnoxSession
 import org.apache.knox.gateway.shell.KnoxTokenCredentialCollector
 import org.apache.knox.gateway.shell.idbroker.Credentials as CAB
@@ -19,38 +20,45 @@ import org.apache.http.util.EntityUtils
 
 gateway = "https://localhost:8443/gateway/gcp-cab"
 
+delegationToken = null
+
 // Get the delegation token from a previous knoxinit
 credentials = new KnoxTokenCredentialCollector()
-credentials.collect()
-delegationToken = credentials.string()
+try {
+    credentials.collect()
+    delegationToken = credentials.string()
+} catch (CredentialCollectionException e) {
+    println e.getMessage()
+}
 
-println "Knox Token: " + delegationToken + "\n" // TODO: DELETE ME
+if (delegationToken != null) {
+    println "Knox Token: " + delegationToken + "\n" // TODO: DELETE ME
 
-// Use the access token to get the cloud credentials from the ID Broker
-headers = new HashMap<String, String>();
-headers.put("Authorization", "Bearer " + delegationToken)
-session = KnoxSession.login(gateway, headers)
-cabResponse = CAB.get(session).now().string
-println "Temp Credentials from CAB:\n" + cabResponse
+    // Use the access token to get the cloud credentials from the ID Broker
+    headers = new HashMap<String, String>();
+    headers.put("Authorization", "Bearer " + delegationToken)
+    session = KnoxSession.login(gateway, headers)
+    cabResponse = CAB.get(session).now().string
+    println "Temp Credentials from CAB:\n" + cabResponse
 
-json = (new JsonSlurper()).parseText(cabResponse)
-storageAuthToken = json.accessToken
-//println "Storage auth token: " + storageAuthToken + "\n"
+    json = (new JsonSlurper()).parseText(cabResponse)
+    storageAuthToken = json.accessToken
 
-session.shutdown()
+    session.shutdown()
 
-// Use the temporary credentials to interact with Google storage
-gcp = "https://www.googleapis.com"
+    // Use the temporary credentials to interact with Google storage
+    gcp = "https://www.googleapis.com"
 
-httpClient = HttpClientBuilder.create().build()
-getRequest = new HttpGet(gcp + "/storage/v1/b/?project=gcpidbroker")
+    httpClient = HttpClientBuilder.create().build()
+    getRequest = new HttpGet(gcp + "/storage/v1/b/?project=gcpidbroker")
 
-// First WITHOUT the auth token from the ID Broker (should yield a 401)
-response = httpClient.execute(getRequest)
-println "Without Temp Credentials:\n" + EntityUtils.toString(response.getEntity())
+    // First WITHOUT the auth token from the ID Broker (should yield a 401)
+    response = httpClient.execute(getRequest)
+    println "Without Temp Credentials:\n" + EntityUtils.toString(response.getEntity())
 
-// Then, WITH the auth token from the ID Broker (should succeed)
-getRequest.setHeader("Authorization", "Bearer " + storageAuthToken)
-response = httpClient.execute(getRequest)
-println "With Temp Credentials:\n" + EntityUtils.toString(response.getEntity())
+    // Then, WITH the auth token from the ID Broker (should succeed)
+    getRequest.setHeader("Authorization", "Bearer " + storageAuthToken)
+    response = httpClient.execute(getRequest)
+    println "With Temp Credentials:\n" + EntityUtils.toString(response.getEntity())
+}
 
