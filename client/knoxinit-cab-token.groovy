@@ -1,4 +1,4 @@
-import org.apache.knox.gateway.shell.Hadoop
+import org.apache.knox.gateway.shell.KnoxSession
 import org.apache.knox.gateway.shell.KnoxTokenCredentialCollector
 import org.apache.knox.gateway.shell.idbroker.Credentials as CAB
 
@@ -21,7 +21,7 @@ delegationToken = credentials.string()
 headers = new HashMap<String, String>();
 headers.put("Authorization", "Bearer " + delegationToken)
 
-session = Hadoop.login(gateway, headers)
+session = KnoxSession.login(gateway, headers)
 
 println "Cloud Credentials: " + CAB.get(session).now().string
 

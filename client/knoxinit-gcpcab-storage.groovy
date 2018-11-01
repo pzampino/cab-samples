@@ -1,4 +1,4 @@
-import org.apache.knox.gateway.shell.Hadoop
+import org.apache.knox.gateway.shell.KnoxSession
 import org.apache.knox.gateway.shell.KnoxTokenCredentialCollector
 import org.apache.knox.gateway.shell.idbroker.Credentials as CAB
 import org.apache.knox.gateway.shell.knox.token.Token
@@ -29,7 +29,7 @@ println "Knox Token: " + delegationToken + "\n" // TODO: DELETE ME
 // Use the access token to get the cloud credentials from the ID Broker
 headers = new HashMap<String, String>();
 headers.put("Authorization", "Bearer " + delegationToken)
-session = Hadoop.login(gateway, headers)
+session = KnoxSession.login(gateway, headers)
 cabResponse = CAB.get(session).now().string
 println "Temp Credentials from CAB:\n" + cabResponse
 
